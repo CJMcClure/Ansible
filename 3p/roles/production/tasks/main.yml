@@ -1,0 +1,42 @@
+---
+
+# Config server files #
+- name: Remove Default Config
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+  notify:
+    - Reload Nginx
+
+- name: Add PHP Server Config
+  template: src={{ php }}.j2 dest=/etc/nginx/sites-available/{{ php }} owner=root
+
+- name: Enable PHP Site Config
+  file: src=/etc/nginx/sites-available/{{ php }} dest=/etc/nginx/sites-enabled/{{ php }} state=link
+  notify: 
+    - Reload Nginx
+
+- name: Add Node Server Config
+  template: src={{ node }}.j2 dest=/etc/nginx/sites-available/{{ node }} owner=root
+
+- name: Enable Node Site Config
+  file: src=/etc/nginx/sites-available/{{ node }} dest=/etc/nginx/sites-enabled/{{ node }} state=link
+  notify: 
+    - Reload Nginx
+
+- name: Add HTML Server Config
+  template: src={{ html }}.j2 dest=/etc/nginx/sites-available/{{ html }} owner=root
+
+- name: Enable HTML Site Config
+  file: src=/etc/nginx/sites-available/{{ html }} dest=/etc/nginx/sites-enabled/{{ html }} state=link
+  notify: 
+    - Reload Nginx
+
+
+ 
+
+
+  
+    
+
+
+
+

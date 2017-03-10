@@ -1,0 +1,80 @@
+---
+# Create Non-Root System User ################################################################################
+- user:
+    name: mcclure
+    password: "{{ password }}"
+    group: sudo
+
+# Start Nginx Tasks ##########################################################################################
+- name: Add Nginx Repo
+  apt_repository: repo='ppa:nginx/stable' state=present
+
+- name: Install Nginx
+  apt: pkg=nginx state=latest update_cache=true
+  notify:
+    - Start Nginx
+
+- file:
+    path: /var/www/html
+    state: directory
+    mode: 0755
+    
+- file:
+    path: /var/www/php
+    state: directory
+    mode: 0755
+
+- file:
+    path: /var/www/node
+    state: directory
+    mode: 0755
+
+# Install MariaDB ############################################################################################
+- name: Add MariaDB repository 
+  apt_repository: repo='deb http://ftp.igh.cnrs.fr/pub/mariadb/repo/10.0/ubuntu trusty main' state=present 
+
+- name: Add repository key to the system 
+  apt_key: keyserver=keyserver.ubuntu.com id=0xcbcb082a1bb943db 
+
+- name: Install Mariadb 
+  apt: name=mariadb-server state=latest update_cache=yes
+
+- name: Install python mysql plugin
+  apt: name=python-mysqldb state=latest update_cache=yes
+
+# Configure MariaDB #
+- name: Delete Anonymous MySQL user
+  mysql_user:
+    name: ''
+    host: localhost
+    state: absent
+
+- name: Create non-root user
+  mysql_user:
+    name: 'mcclure'
+    password: "{{ password }}"
+    priv: '*.*:ALL'
+    state: present
+
+# Start PHP Tasks ###########################################################################################
+
+- name: Add PHP to repository
+  apt_repository: repo='ppa:ondrej/php' state=present update_cache=yes
+
+- name: Install PHP 
+  apt: name={{item}} state=installed
+  with_items:
+       - php-fpm
+       - php-mysql
+  notify:
+    - Restart FPM
+
+ 
+
+
+  
+    
+
+
+
+

@@ -1,0 +1,37 @@
+---
+# Start GIT tasks ###########################################################################################
+
+- name: Setup git for continuos integration in HTML
+  shell: "{{ item }}"
+  with_items:
+     - git init
+     - git remote add origin https://github.com/CJMcClure/dwa_html 
+  args:
+    chdir: /var/www/html
+
+- name: Setup git for continuos integration in NODE
+  shell: "{{ item }}"
+  with_items:
+     - git init
+     - git remote add origin https://github.com/CJMcClure/dwa_node 
+  args:
+    chdir: /var/www/node
+
+- name: Setup git for continuos integration in PHP
+  shell: "{{ item }}"
+  with_items:
+     - git init
+     - git remote add origin https://github.com/CJMcClure/dwa_php 
+  args:
+    chdir: /var/www/php
+  
+
+ 
+
+
+  
+    
+
+
+
+

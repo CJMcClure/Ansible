@@ -1,0 +1,22 @@
+---
+- hosts: staging
+  become: true
+  user: root
+  roles: 
+    - lemp
+    - node
+    - git
+
+- hosts: production
+  become: true
+  user: root
+  roles:
+    - lemp
+    - node
+    - git
+
+- hosts: jenkins
+  become: true
+  user: root
+  roles:
+    - jenkins

@@ -1,0 +1,54 @@
+---
+# Install NodeJS ###################################################################################
+- name: Update apt-get
+  apt:
+    update_cache: yes
+
+- name: Source package build package one
+  apt:
+    name: build-essential
+
+- name: Source package build package two
+  apt:
+    name: libssl-dev
+
+- name: Pull down NVM installation script
+  get_url:
+    url: https://raw.githubusercontent.com/creationix/nvm/{{ nvm_version }}/install.sh
+    dest: ~/install.sh
+    mode: u=rwX,g=rX,o=rX
+
+- name: Install NVM 
+  shell: bash install.sh
+  args: 
+    chdir: ~/
+
+- name: Delete NVM install file
+  file:
+    state: absent
+    path: ~/install.sh
+
+- name: install nodejs using nvm
+  sudo: yes
+  sudo_user: "root"
+  command: bash -c '. ~/.nvm/nvm.sh; nvm install '
+
+- name: set default node version
+  sudo: yes
+  sudo_user: "root"
+  command: bash -c '. ~/.nvm/nvm.sh; nvm alias default '
+
+- name: Install NodeJS
+  shell: nvm install {{ node_version }}
+
+
+
+ 
+
+
+  
+    
+
+
+
+
