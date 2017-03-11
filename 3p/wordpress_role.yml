@@ -2,4 +2,4 @@
   become: true
   user: root
   roles: 
-    - node
+    - wordpress

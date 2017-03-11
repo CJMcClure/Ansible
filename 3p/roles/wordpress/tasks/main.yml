@@ -1,0 +1,57 @@
+---
+- name: Install php plugins for Wordpress
+  apt: name={{item}} state=installed
+  with_items:
+       - php-curl
+       - php-gd
+       - php-mbstring
+       - php-mcrypt
+       - php-xml
+       - php-xmlrpc
+  notify:
+    - Restart FPM
+
+- name: Create wordpress database
+  mysql_db:
+    name: wordpress
+    state: present
+    login_user: mcclure
+    login_password: "{{ password }}"
+
+- name: Install Wordpress
+  shell: curl -O https://wordpress.org/latest.tar.gz
+
+- name: Extract Wordpress
+  shell: tar xzvf latest.tar.gz
+
+- name: Transfer our wp-config file into project directory
+  copy: src=wp-config.php dest=~/wordpress owner=root group=root
+
+- name: Create upgrade directory 
+  file:
+    path: ~/wordpress/wp-content/upgrade
+    state: directory
+    mode: 0755
+
+- name: Copy wordpress files to php hosting directory
+  shell: rsync -avP ~/wordpress/ /var/www/php/
+
+- file:
+    path: /var/www/php
+    owner: root
+    group: www-data
+    mode: 0755
+
+
+
+
+
+ 
+
+
+  
+    
+
+
+
+

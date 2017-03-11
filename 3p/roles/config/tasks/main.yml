@@ -19,12 +19,6 @@
 
 - name: Enable PHP Site Config
   file: src=/etc/nginx/sites-available/php dest=/etc/nginx/sites-enabled/php state=link
-
-
- 
-
-
-  
     
 
 

@@ -1,0 +1,7 @@
+---
+- hosts: stagingtest
+  become: true
+  user: root
+  roles: 
+    - express
+    - wordpress
